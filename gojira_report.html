@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Gojira Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 30px; max-width: 1000px;}
+h1 {color: #333;}
+h2 {margin-top: 40px; color: #444;}
+.summary-table, .percentile-table {
+  border-collapse: collapse;
+  margin-top: 15px;
+  width: 100%;
+}
+.summary-table th, .summary-table td, .percentile-table th, .percentile-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.summary-table tr:nth-child(even), .percentile-table tr:nth-child(even) {background-color: #f9f9f9;}
+.summary-table th, .percentile-table th {background-color: #007bff; color: white;}
+.chart-container {width: 100%; height: 400px; margin-top: 30px;}
+footer {margin-top: 50px; font-size: 0.9em; color: #777;}
+</style>
+</head>
+<body>
+  <h1>Gojira Load Test Report</h1>
+
+  <h2>Summary</h2>
+  <table class="summary-table">
+    <tr><th>Metric</th><th>Value</th></tr>
+    <tr><td>Total Requests</td><td>196</td></tr>
+    <tr><td>Successful Requests</td><td>196</td></tr>
+    <tr><td>Failed Requests</td><td>0</td></tr>
+    <tr><td>Total Data Transferred</td><td>0.00 MB</td></tr>
+    <tr><td>Test Duration</td><td>5s</td></tr>
+    <tr><td>Average Latency (ms)</td><td>125.91</td></tr>
+    <tr><td>Requests Per Second</td><td>39.20</td></tr>
+  </table>
+
+  <h2>Latency Percentiles (ms)</h2>
+  <table class="percentile-table">
+    <tr><th>Percentile</th><th>Latency</th></tr>
+    
+      <tr><td>p50</td><td>109.11</td></tr>
+    
+      <tr><td>p90</td><td>111.07</td></tr>
+    
+      <tr><td>p95</td><td>112.88</td></tr>
+    
+      <tr><td>p99</td><td>787.29</td></tr>
+    
+  </table>
+
+  <h2>Latency Distribution</h2>
+  <div class="chart-container">
+    <canvas id="histogram"></canvas>
+  </div>
+
+  <h2>Latency over Time</h2>
+  <div class="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <footer>Generated at Sun, 02 Nov 2025 11:38:45 CET by Gojira Load Tester</footer>
+
+  <script>
+  const latencies = [576.5783,682.7772,787.2887,787.2887,787.2887,212.6572,110.959,110.4264,112.6164,112.0544,114.1447,108.371,109.4356,107.9899,107.25999999999999,108.5232,110.9,109.09349999999999,109.1071,109.5552,109.0222,109.8432,109.3125,108.8563,109.1406,110.17530000000001,109.09009999999999,110.12339999999999,109.3371,110.8929,110.8764,109.18759999999999,109.18360000000001,108.5055,108.504,109.5841,107.6165,111.0727,108.84,108.8259,108.97179999999999,110.65650000000001,108.9271,111.38860000000001,109.1494,110.9353,109.0634,110.62089999999999,109.1784,109.8949,111.9,109.5993,109.086,109.69460000000001,108.0604,109.5117,108.7328,109.2498,106.84920000000001,107.8017,108.34230000000001,109.08080000000001,110.36540000000001,109.1523,108.64609999999999,108.5223,108.7758,109.3314,108.0732,108.0106,109.0961,110.0691,109.00949999999999,107.6932,107.6917,105.556,110.32260000000001,109.0375,110.0937,109.65419999999999,109.65419999999999,109.5646,109.0865,109.0706,111.0151,110.5119,109.03659999999999,111.3074,108.8057,110.3996,111.8392,108.9716,108.1468,105.1108,108.1417,110.467,108.2921,109.9698,109.42399999999999,109.42150000000001,107.0993,110.0792,107.26270000000001,108.47179999999999,107.2444,112.1299,109.1555,109.15610000000001,109.05850000000001,109.5622,109.2659,110.6182,109.2747,107.8558,108.3349,104.7036,109.22279999999999,110.2517,108.5226,108.0442,108.9323,108.8225,107.7027,107.48140000000001,108.98689999999999,108.7481,109.4965,108.4772,109.1544,108.7124,107.5534,108.39569999999999,108.3774,107.9341,108.6587,107.95580000000001,108.7651,108.6095,108.7313,107.9947,107.9962,109.7563,108.827,111.0762,109.3163,109.2029,108.6251,110.3887,108.5148,108.38589999999999,108.15610000000001,109.0608,109.5655,108.6636,108.6747,108.67609999999999,109.9884,110.77499999999999,108.25070000000001,110.7368,107.6314,109.2047,109.557,108.4898,109.1122,109.5384,109.3925,108.1888,110.2414,110.8487,109.7371,108.5144,111.6973,109.3078,107.6182,108.54419999999999,108.5789,107.4588,109.5802,115.5645,112.8764,110.2799,110.244,110.244,108.4811,109.1075,107.5579,109.0389,109.0373,107.9164,107.9514,107.7864,109.21029999999999,110.2419,109.5085,203.31810000000002];
+  const ctx1 = document.getElementById('chart').getContext('2d');
+  const ctx2 = document.getElementById('histogram').getContext('2d');
+
+  
+  new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: latencies.map((_, i) => i),
+      datasets: [{
+        label: 'Latency (ms)',
+        data: latencies,
+        borderColor: '#007bff',
+        backgroundColor: 'rgba(0,123,255,0.1)',
+        pointRadius: 0,
+      }]
+    },
+    options: {
+      scales: {
+        x: {display: true, title: {display: true, text: 'Request #'}},
+        y: {display: true, title: {display: true, text: 'Latency (ms)'}}
+      }
+    }
+  });
+
+  
+  const bins = Array(20).fill(0);
+  const max = Math.max(...latencies);
+  for (const l of latencies) {
+    const idx = Math.min(Math.floor(l / max * bins.length), bins.length - 1);
+    bins[idx]++;
+  }
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: bins.map((_, i) => Math.round(i / bins.length * max)),
+      datasets: [{
+        label: 'Count',
+        data: bins,
+        backgroundColor: 'rgba(0, 123, 255, 0.6)'
+      }]
+    },
+    options: {
+      scales: {
+        x: {title: {display: true, text: 'Latency (ms)'}},
+        y: {title: {display: true, text: 'Count'}}
+      }
+    }
+  });
+  </script>
+</body>
+</html>
